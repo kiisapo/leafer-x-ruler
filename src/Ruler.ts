@@ -235,12 +235,12 @@ export class Ruler {
     this.config.enabled = value
     if (value) {
       this.app.tree.on(LayoutEvent.AFTER, this.forceRender)
-      this.app.tree.on(ResizeEvent.RESIZE, this.resize)
+      this.rulerLeafer.on(ResizeEvent.RESIZE, this.resize)
       this.app.editor?.on(EditorEvent.SELECT, this.forceRender)
       this.resize()
     } else {
       this.app.tree.off(LayoutEvent.AFTER, this.forceRender)
-      this.app.tree.off(ResizeEvent.RESIZE, this.resize)
+      this.rulerLeafer.off(ResizeEvent.RESIZE, this.resize)
       this.app.editor?.off(EditorEvent.SELECT, this.forceRender)
       this.rulerLeafer.forceRender()
     }
@@ -253,11 +253,9 @@ export class Ruler {
   }
 
   public resize() {
-    setTimeout(() => {
-      if (this.enabled) {
-        this.render({ ctx: this.contextContainer })
-      }
-    }, 100)
+    requestAnimationFrame(() => {
+			this.enabled && this.render({ ctx: this.contextContainer });
+		});
   }
 
   /**
